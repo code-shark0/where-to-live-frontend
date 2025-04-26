@@ -1,0 +1,56 @@
+[
+    {
+        "id": 1,
+        "name": "Seattle, WA",
+        "costOfLivingIndex": 85,
+        "crimeIndex": 45,
+        "medianIncome": 92000,
+        "walkabilityScore": 74,
+        "averageTemperature": 53
+    },
+    {
+        "id": 2,
+        "name": "Austin, TX",
+        "costOfLivingIndex": 75,
+        "crimeIndex": 50,
+        "medianIncome": 71000,
+        "walkabilityScore": 41,
+        "averageTemperature": 68
+    },
+    {
+        "id": 3,
+        "name": "Denver, CO",
+        "costOfLivingIndex": 80,
+        "crimeIndex": 40,
+        "medianIncome": 78000,
+        "walkabilityScore": 61,
+        "averageTemperature": 52
+    },
+    {
+        "id": 4,
+        "name": "Portland, OR",
+        "costOfLivingIndex": 78,
+        "crimeIndex": 55,
+        "medianIncome": 75000,
+        "walkabilityScore": 65,
+        "averageTemperature": 54
+    },
+    {
+        "id": 5,
+        "name": "Miami, FL",
+        "costOfLivingIndex": 88,
+        "crimeIndex": 60,
+        "medianIncome": 57000,
+        "walkabilityScore": 77,
+        "averageTemperature": 77
+    },
+    {
+        "id": 6,
+        "name": "Boston, MA",
+        "costOfLivingIndex": 90,
+        "crimeIndex": 35,
+        "medianIncome": 82000,
+        "walkabilityScore": 82,
+        "averageTemperature": 59
+    }
+]
