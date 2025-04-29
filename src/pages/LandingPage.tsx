@@ -12,7 +12,42 @@ const LandingPage: FC = () => {
 
     useEffect(() => {
         const loadContent = async () => {
-            setCityData(cities);
+            const injectedCities: Array<City> = cities.map(city => ({
+                ...city,
+                costOfLivingIndex: {
+                    type: 'lowerIsBetter',
+                    value: city.costOfLivingIndex,
+                    min: 0,
+                    max: 100
+                },
+                crimeIndex: {
+                    type: 'lowerIsBetter',
+                    value: city.crimeIndex,
+                    min: 0,
+                    max: 100
+                },
+                medianIncome: {
+                    type: 'higherIsBetter',
+                    value: city.medianIncome,
+                    min: 57000,
+                    max: 92000,
+                },
+                walkabilityScore: {
+                    type: 'higherIsBetter',
+                    value: city.walkabilityScore,
+                    min: 0,
+                    max: 100,
+                },
+                averageTemperature: {
+                    type: 'specialCase',
+                    value: city.averageTemperature,
+                    min: 52,
+                    max: 77,
+                },
+                id: city.id.toString()
+            }));
+
+            setCityData(injectedCities);
         }
 
         loadContent();
@@ -26,9 +61,6 @@ const LandingPage: FC = () => {
         });
         setFilteredData(filteredData);
     }, [searchValue, cityData]);
-
-    const handleLogoutClick = () => {
-    }
 
     return (
         <Box
@@ -52,9 +84,6 @@ const LandingPage: FC = () => {
                 backgroundColor: theme.palette.primary.dark,
                 padding: '2rem'
             }}>
-                {/* <Button variant="contained" color="secondary" onClick={handleLogoutClick}>
-                    Logout
-                </Button> */}
             </Box>
             <Box sx={{
                 display: 'flex',
