@@ -1,21 +1,19 @@
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { FC, useEffect, useState } from "react";
 import { Box } from "@mui/material";
-import { City } from "../types/City";
+import { City, ScoredCity } from "../types/City";
 import { Preferences } from "../types/Preferences";
+import PreferencesSlider from "./PreferencesSlider";
 import { calculateScore } from "../utils/scoreCalculations";
-import SliderHeaderBox from "./SliderHeader";
 
 interface ResultsListProps {
     data: Array<City>;
 }
 
-
-
 // Results list that displays all catalog items filtered by a search
 // The data coming in is assumed to be an aggregated superset of all the users saved albums, tracks, and episodes
 const ResultsList: FC<ResultsListProps> = ({data}) => {
-    const [listData, setListData] = useState<Array<City>>([]);
+    const [listData, setListData] = useState<Array<ScoredCity>>([]);
     const [preferences, setPreferences] = useState<Preferences>({
         costOfLivingIndex: 0,
         crimeIndex: 0,
@@ -23,12 +21,6 @@ const ResultsList: FC<ResultsListProps> = ({data}) => {
         walkabilityScore: 0,
         averageTemperature: 0
     });
-
-    // One of the core obvious changes that I could make here in addition to cleaning up the styling would be
-    // to add in virtualization with infinite scrolling, or pagination which would be simple enough on the component side with tanstack. 
-    // It might also be a good idea depending on the amount of data coming in from the API to limit the amount of data
-    // coming in, and dynamically make calls to grab more data as the user scrolls down the page, or when the
-    // next page is requested if it was made in a table with pagination.
 
     useEffect(() => {
         setListData(data.map(item => {return {
@@ -40,54 +32,43 @@ const ResultsList: FC<ResultsListProps> = ({data}) => {
             medianIncome: item?.medianIncome,
             walkabilityScore: item?.walkabilityScore,
             averageTemperature: item?.averageTemperature}}));
-    }, [data]);
+    }, [data, preferences]);
 
-    const columnHelper = createColumnHelper<City>();
+    const columnHelper = createColumnHelper<ScoredCity>();
     const columns = [
         columnHelper.accessor('name', {
             header: 'Name',
             cell: info => info.renderValue(),
             enableSorting: true,
         }),
+        columnHelper.accessor('score', {
+            header: 'Score',
+            cell: info => info.getValue(),
+            enableSorting: true,
+        }),
         columnHelper.accessor('costOfLivingIndex', {
-            header: () => (
-                <SliderHeaderBox
-                    label="Cost of Living"
-                    value={preferences.costOfLivingIndex}
-                    onChange={(e, val) => setPreferences(p => ({ ...p, costOfLivingIndex: val as number }))}
-                    min={-3}
-                    max={3}
-                />
-            ),
-            cell: info => info.renderValue(),
+            header: 'Cost of Living',
+            cell: info => info.getValue().value,
             enableSorting: true,
         }),
         columnHelper.accessor('crimeIndex', {
-            header: () => (
-                <SliderHeaderBox
-                    label="Crime"
-                    value={preferences.crimeIndex}
-                    onChange={(e, val) => setPreferences(p => ({ ...p, crimeIndex: val as number }))}
-                    min={-3}
-                    max={3}
-                />
-            ),
-            cell: info => info.renderValue(),
-            enableSorting: true
+            header: 'Crime',
+            cell: info => info.getValue().value,
+            enableSorting: true,
         }),
         columnHelper.accessor('medianIncome', {
             header: 'Median Income',
-            cell: info => info.renderValue(),
+            cell: info => info.getValue().value,
             enableSorting: true
         }),
         columnHelper.accessor('walkabilityScore', {
             header: 'Walkability',
-            cell: info => info.renderValue(),
+            cell: info => info.getValue().value,
             enableSorting: true
         }),
         columnHelper.accessor('averageTemperature', {
             header: 'Average Temperature',
-            cell: info => info.renderValue(),
+            cell: info => info.getValue().value,
             enableSorting: true
         })
     ]
@@ -105,6 +86,27 @@ const ResultsList: FC<ResultsListProps> = ({data}) => {
                 width: '100%',
             }}
         >
+            <Box
+                display="flex"
+                flexDirection="row"
+                justifyContent="center"
+                alignItems="flex-end"
+                gap={2}
+                sx={{ mb: 2 }}
+            >
+                {
+                    Object.keys(preferences).map(key => (
+                        <PreferencesSlider
+                            key={key}
+                            label={key}
+                            value={preferences[key as keyof Preferences]}
+                            onChange={(e, val) => setPreferences(p => ({ ...p, [key]: val as number }))}
+                            min={-3}
+                            max={3}
+                        />
+                    ))
+                }
+            </Box>
             <table style={{
                 textAlign: 'center',
                 alignItems: 'center',

@@ -17,14 +17,14 @@ const LandingPage: FC = () => {
                 costOfLivingIndex: {
                     type: 'lowerIsBetter',
                     value: city.costOfLivingIndex,
-                    min: 0,
-                    max: 100
+                    min: 75,
+                    max: 90
                 },
                 crimeIndex: {
                     type: 'lowerIsBetter',
                     value: city.crimeIndex,
-                    min: 0,
-                    max: 100
+                    min: 35,
+                    max: 60
                 },
                 medianIncome: {
                     type: 'higherIsBetter',
@@ -35,8 +35,8 @@ const LandingPage: FC = () => {
                 walkabilityScore: {
                     type: 'higherIsBetter',
                     value: city.walkabilityScore,
-                    min: 0,
-                    max: 100,
+                    min: 41,
+                    max: 82,
                 },
                 averageTemperature: {
                     type: 'specialCase',

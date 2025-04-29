@@ -8,6 +8,10 @@ export interface City {
 	averageTemperature: IndexData;    // In Fahrenheit
 }
 
+export interface ScoredCity extends City {
+    score: number;
+}
+
 export interface IndexData {
     type: 'higherIsBetter' | 'lowerIsBetter' | 'specialCase';
     value: number;

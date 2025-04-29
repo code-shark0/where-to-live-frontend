@@ -9,7 +9,7 @@ interface SliderHeaderBoxProps {
     step?: number;
 }
 
-const SliderHeaderBox: React.FC<SliderHeaderBoxProps> = ({
+const PreferencesSlider: React.FC<SliderHeaderBoxProps> = ({
     label,
     value,
     onChange,
@@ -17,22 +17,27 @@ const SliderHeaderBox: React.FC<SliderHeaderBoxProps> = ({
     max = 100,
     step = 1,
 }) => (
-    <Box display="flex" flexDirection="column" alignItems="center" sx={{ width: 140, px: 1, gap: '1rem'}}>
+    <Box
+        sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            width: '100%',
+            padding: '8px'
+        }}
+    >
+        <Typography>{label}</Typography>
         <Slider
             value={value}
             onChange={onChange}
             min={min}
             max={max}
             step={step}
-            marks={[{ value: min, label: 'Whatever' }, { value: max, label: 'Need it' }]}
-            size="medium"
+            marks={[{ value: min, label: '😐' }, { value: max, label: '😍' }]}
+            size="small"
             sx={{ mb: 1, width: "100%" }}
             aria-labelledby={`slider-${label}`}
         />
-        <Typography variant="subtitle1" fontWeight="bold" align="center">
-        {label}
-        </Typography>
     </Box>
 );
 
-export default SliderHeaderBox;
+export default PreferencesSlider;
