@@ -2,15 +2,27 @@ import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "
 import { FC, useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import { City } from "../types/City";
+import { Preferences } from "../types/Preferences";
+import { calculateScore } from "../utils/scoreCalculations";
+import SliderHeaderBox from "./SliderHeader";
 
 interface ResultsListProps {
     data: Array<City>;
 }
 
+
+
 // Results list that displays all catalog items filtered by a search
 // The data coming in is assumed to be an aggregated superset of all the users saved albums, tracks, and episodes
 const ResultsList: FC<ResultsListProps> = ({data}) => {
     const [listData, setListData] = useState<Array<City>>([]);
+    const [preferences, setPreferences] = useState<Preferences>({
+        costOfLivingIndex: 0,
+        crimeIndex: 0,
+        medianIncome: 0,
+        walkabilityScore: 0,
+        averageTemperature: 0
+    });
 
     // One of the core obvious changes that I could make here in addition to cleaning up the styling would be
     // to add in virtualization with infinite scrolling, or pagination which would be simple enough on the component side with tanstack. 
@@ -20,7 +32,8 @@ const ResultsList: FC<ResultsListProps> = ({data}) => {
 
     useEffect(() => {
         setListData(data.map(item => {return {
-            id: item?.id, 
+            id: item?.id,
+            score: calculateScore(item, preferences),
             name: item?.name,
             costOfLivingIndex: item?.costOfLivingIndex,
             crimeIndex: item?.crimeIndex,
@@ -37,12 +50,28 @@ const ResultsList: FC<ResultsListProps> = ({data}) => {
             enableSorting: true,
         }),
         columnHelper.accessor('costOfLivingIndex', {
-            header: 'Cost of Living',
+            header: () => (
+                <SliderHeaderBox
+                    label="Cost of Living"
+                    value={preferences.costOfLivingIndex}
+                    onChange={(e, val) => setPreferences(p => ({ ...p, costOfLivingIndex: val as number }))}
+                    min={-3}
+                    max={3}
+                />
+            ),
             cell: info => info.renderValue(),
             enableSorting: true,
         }),
         columnHelper.accessor('crimeIndex', {
-            header: 'Crime',
+            header: () => (
+                <SliderHeaderBox
+                    label="Crime"
+                    value={preferences.crimeIndex}
+                    onChange={(e, val) => setPreferences(p => ({ ...p, crimeIndex: val as number }))}
+                    min={-3}
+                    max={3}
+                />
+            ),
             cell: info => info.renderValue(),
             enableSorting: true
         }),
