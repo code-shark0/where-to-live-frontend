@@ -1,10 +1,11 @@
-import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import { createColumnHelper, flexRender, getCoreRowModel, useReactTable, getSortedRowModel, SortingState } from "@tanstack/react-table";
 import { FC, useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import { City, ScoredCity } from "../types/City";
 import { Preferences } from "../types/Preferences";
 import PreferencesSlider from "./PreferencesSlider";
 import { calculateScore } from "../utils/scoreCalculations";
+
 
 interface ResultsListProps {
     data: Array<City>;
@@ -73,11 +74,16 @@ const ResultsList: FC<ResultsListProps> = ({data}) => {
         })
     ]
 
+    const [sorting, setSorting] = useState<SortingState>([]);
+
     const table = useReactTable({
         data: listData,
         columns,
+        state: { sorting },
+        onSortingChange: setSorting,
         getCoreRowModel: getCoreRowModel(),
-    })
+        getSortedRowModel: getSortedRowModel(),
+    });
 
     return (
         <Box   
@@ -117,12 +123,22 @@ const ResultsList: FC<ResultsListProps> = ({data}) => {
                     {table.getHeaderGroups().map(headerGroup => (
                     <tr key={headerGroup.id}>
                         {headerGroup.headers.map(header => (
-                        <th key={header.id}>
+                        <th
+                            key={header.id}
+                            onClick={header.column.getToggleSortingHandler()}
+                            style={{ cursor: header.column.getCanSort() ? 'pointer' : 'default', userSelect: 'none' }}
+                        >
                             {header.isPlaceholder
-                            ? null
-                            : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
+                                ? null
+                                : (
+                                    <>
+                                        {flexRender(header.column.columnDef.header, header.getContext())}
+                                        {header.column.getCanSort() && (
+                                            <span style={{ marginLeft: 4 }}>
+                                                {header.column.getIsSorted() === 'asc' ? '▲' : header.column.getIsSorted() === 'desc' ? '▼' : ''}
+                                            </span>
+                                        )}
+                                    </>
                                 )}
                         </th>
                         ))}
