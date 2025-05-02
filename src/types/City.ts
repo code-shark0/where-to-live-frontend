@@ -1,5 +1,15 @@
 export interface City {
-	id: string;
+	id: number;
+	name: string;
+	costOfLivingIndex: number;     // Higher = more expensive
+	crimeIndex: number;            // Higher = more crime
+	medianIncome: number;          // In USD
+	walkabilityScore: number;      // 0–100
+	averageTemperature: number;    // In Fahrenheit
+}
+
+export interface InjectedCity {
+	id: number;
 	name: string;
 	costOfLivingIndex: IndexData;     // Higher = more expensive
 	crimeIndex: IndexData;            // Higher = more crime
@@ -8,7 +18,7 @@ export interface City {
 	averageTemperature: IndexData;    // In Fahrenheit
 }
 
-export interface ScoredCity extends City {
+export interface ScoredCity extends InjectedCity {
     score: number;
 }
 

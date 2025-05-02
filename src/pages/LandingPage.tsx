@@ -1,57 +1,13 @@
-import { Box, Button, TextField } from "@mui/material";
+import { Box, TextField } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import ResultsList from "../components/ResultsList";
 import theme from "../theme";
-import { City } from "../types/City";
-import cities from "../data/cities.json";
+import { useCities } from "../hooks/useCities";
 
 const LandingPage: FC = () => {
-    const [cityData, setCityData] = useState<Array<City>>([]);
     const [filteredData, setFilteredData] = useState<Array<any>>([]);
     const [searchValue, setSearchValue] = useState('');
-
-    useEffect(() => {
-        const loadContent = async () => {
-            const injectedCities: Array<City> = cities.map(city => ({
-                ...city,
-                costOfLivingIndex: {
-                    type: 'lowerIsBetter',
-                    value: city.costOfLivingIndex,
-                    min: 75,
-                    max: 90
-                },
-                crimeIndex: {
-                    type: 'lowerIsBetter',
-                    value: city.crimeIndex,
-                    min: 35,
-                    max: 60
-                },
-                medianIncome: {
-                    type: 'higherIsBetter',
-                    value: city.medianIncome,
-                    min: 57000,
-                    max: 92000,
-                },
-                walkabilityScore: {
-                    type: 'higherIsBetter',
-                    value: city.walkabilityScore,
-                    min: 41,
-                    max: 82,
-                },
-                averageTemperature: {
-                    type: 'specialCase',
-                    value: city.averageTemperature,
-                    min: 52,
-                    max: 77,
-                },
-                id: city.id.toString()
-            }));
-
-            setCityData(injectedCities);
-        }
-
-        loadContent();
-    }, []);
+    const cityData = useCities();
 
     useEffect(() => {
         const filteredData = cityData.filter(item => {

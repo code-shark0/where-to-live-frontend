@@ -1,14 +1,14 @@
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable, getSortedRowModel, SortingState } from "@tanstack/react-table";
 import { FC, useEffect, useState } from "react";
 import { Box } from "@mui/material";
-import { City, ScoredCity } from "../types/City";
+import { InjectedCity, ScoredCity } from "../types/City";
 import { Preferences } from "../types/Preferences";
 import PreferencesSlider from "./PreferencesSlider";
 import { calculateScore } from "../utils/scoreCalculations";
 
 
 interface ResultsListProps {
-    data: Array<City>;
+    data: Array<InjectedCity>;
 }
 
 // Results list that displays all catalog items filtered by a search
