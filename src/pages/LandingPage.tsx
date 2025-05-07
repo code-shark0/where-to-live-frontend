@@ -1,13 +1,22 @@
-import { Box, TextField } from "@mui/material";
+import { Box, Button, TextField } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import ResultsList from "../components/ResultsList";
 import theme from "../theme";
 import { useCities } from "../hooks/useCities";
+import Header from "../components/Header";
+import { Preferences } from "../types/Preferences";
 
 const LandingPage: FC = () => {
     const [filteredData, setFilteredData] = useState<Array<any>>([]);
     const [searchValue, setSearchValue] = useState('');
     const cityData = useCities();
+    const [preferences, setPreferences] = useState<Preferences>({
+        costOfLivingIndex: 0,
+        crimeIndex: 0,
+        medianIncome: 0,
+        walkabilityScore: 0,
+        averageTemperature: 0
+    });
 
     useEffect(() => {
         const filteredData = cityData.filter(item => {
@@ -18,6 +27,19 @@ const LandingPage: FC = () => {
         setFilteredData(filteredData);
     }, [searchValue, cityData]);
 
+    const handleSetPreferences = (updater: (prevState: Preferences) => Preferences) => {
+        setPreferences(prev => ({ ...prev, ...updater(prev) }));
+    }
+
+    const handleResetPreferences = () => {
+        setPreferences({
+            costOfLivingIndex: 0,
+            crimeIndex: 0,
+            medianIncome: 0,
+            walkabilityScore: 0,
+            averageTemperature: 0
+        });
+    }
     return (
         <Box
             sx={{ 
@@ -31,29 +53,21 @@ const LandingPage: FC = () => {
                 gap: '1rem',
             }}
         >
-            <Box sx={{
-                display: 'flex',
-                justifyContent: 'end',
-                alignItems: 'center',
-                width: '100vw', 
-                height: '10px', 
-                backgroundColor: theme.palette.secondary.main,
-                padding: '1rem'
-            }}>
-            </Box>
+            <Header/>
             <Box sx={{
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'start',
                 alignItems: 'center',
-                gap: '3rem',
+                gap: '1rem',
                 width: '80vw', 
                 height: '100%',
                 backgroundColor: theme.palette.background.paper,
                 padding: '2rem'
             }}>
                 <TextField variant={"outlined"} label={'Search'} onChange={(e) => setSearchValue(e.target.value)}/>
-                <ResultsList data={filteredData}/>
+                <Button variant="contained" onClick={handleResetPreferences} sx={{ mt: 1 }}>Reset Preferences</Button>
+                <ResultsList cityData={filteredData} preferences={preferences} onSetPreferences={handleSetPreferences}/>
             </Box>
         </Box>
     )

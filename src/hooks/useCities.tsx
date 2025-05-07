@@ -4,7 +4,6 @@ import { InjectedCity } from '../types/City';
 
 export function useCities() {
 	const [cities, setCities] = useState<Array<InjectedCity>>([]);
-    console.log(cities);
 
 	useEffect(() => {
 		fetch('http://localhost:4000/api/cities') // adjust if port is different

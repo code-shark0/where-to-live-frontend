@@ -14,6 +14,11 @@ const theme = createTheme({
 	},
 	typography: {
 		fontFamily: 'Roboto, sans-serif',
+		h1: {
+			fontFamily: 'Laila, sans-serif',
+			fontSize: '24px',
+            fontWeight: 700, 
+		},
 	},
 });
 

@@ -8,23 +8,19 @@ import { calculateScore } from "../utils/scoreCalculations";
 
 
 interface ResultsListProps {
-    data: Array<InjectedCity>;
+    cityData: Array<InjectedCity>;
+    preferences: Preferences;
+    onSetPreferences: (updater: (prevState: Preferences) => Preferences) => void;
 }
 
 // Results list that displays all catalog items filtered by a search
 // The data coming in is assumed to be an aggregated superset of all the users saved albums, tracks, and episodes
-const ResultsList: FC<ResultsListProps> = ({data}) => {
+const ResultsList: FC<ResultsListProps> = ({cityData, preferences, onSetPreferences}) => {
     const [listData, setListData] = useState<Array<ScoredCity>>([]);
-    const [preferences, setPreferences] = useState<Preferences>({
-        costOfLivingIndex: 0,
-        crimeIndex: 0,
-        medianIncome: 0,
-        walkabilityScore: 0,
-        averageTemperature: 0
-    });
+    
 
     useEffect(() => {
-        setListData(data.map(item => {return {
+        setListData(cityData.map(item => {return {
             id: item?.id,
             score: calculateScore(item, preferences),
             name: item?.name,
@@ -33,7 +29,7 @@ const ResultsList: FC<ResultsListProps> = ({data}) => {
             medianIncome: item?.medianIncome,
             walkabilityScore: item?.walkabilityScore,
             averageTemperature: item?.averageTemperature}}));
-    }, [data, preferences]);
+    }, [cityData, preferences]);
 
     const columnHelper = createColumnHelper<ScoredCity>();
     const columns = [
@@ -47,29 +43,34 @@ const ResultsList: FC<ResultsListProps> = ({data}) => {
             cell: info => info.getValue(),
             enableSorting: true,
         }),
-        columnHelper.accessor('costOfLivingIndex', {
+        columnHelper.accessor(row => row.costOfLivingIndex.value, {
+            id: 'costOfLivingIndex',
             header: 'Cost of Living',
-            cell: info => info.getValue().value,
+            cell: info => info.getValue(),
             enableSorting: true,
         }),
-        columnHelper.accessor('crimeIndex', {
+        columnHelper.accessor(row => row.crimeIndex.value, {
+            id: 'crimeIndex',
             header: 'Crime',
-            cell: info => info.getValue().value,
+            cell: info => info.getValue(),
             enableSorting: true,
         }),
-        columnHelper.accessor('medianIncome', {
+        columnHelper.accessor(row => row.medianIncome.value, {
+            id: 'medianIncome',
             header: 'Median Income',
-            cell: info => info.getValue().value,
+            cell: info => info.getValue(),
             enableSorting: true
         }),
-        columnHelper.accessor('walkabilityScore', {
+        columnHelper.accessor(row => row.walkabilityScore.value, {
+            id: 'walkabilityScore',
             header: 'Walkability',
-            cell: info => info.getValue().value,
+            cell: info => info.getValue(),
             enableSorting: true
         }),
-        columnHelper.accessor('averageTemperature', {
+        columnHelper.accessor(row => row.averageTemperature.value, {
+            id: 'averageTemperature',
             header: 'Average Temperature',
-            cell: info => info.getValue().value,
+            cell: info => info.getValue(),
             enableSorting: true
         })
     ]
@@ -101,16 +102,19 @@ const ResultsList: FC<ResultsListProps> = ({data}) => {
                 sx={{ mb: 2 }}
             >
                 {
-                    Object.keys(preferences).map(key => (
-                        <PreferencesSlider
-                            key={key}
-                            label={key}
-                            value={preferences[key as keyof Preferences]}
-                            onChange={(e, val) => setPreferences(p => ({ ...p, [key]: val as number }))}
-                            min={-3}
-                            max={3}
-                        />
-                    ))
+                    Object.keys(preferences).map(key => {
+                        return (
+                            <PreferencesSlider
+                                key={key}
+                                label={key.replace(/([A-Z])/g, ' $1').replace(/^./, char => char.toUpperCase())}
+                                value={preferences[key as keyof Preferences]}
+                                onChange={(e, val) => onSetPreferences(p => ({ ...p, [key]: val as number }))}
+                                min={-3}
+                                max={3}
+                            />
+                        )
+
+                    })
                 }
             </Box>
             <TableContainer component={Paper} sx={{ boxShadow: 3, borderRadius: 2 }}>
