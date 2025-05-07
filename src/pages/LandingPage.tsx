@@ -36,9 +36,9 @@ const LandingPage: FC = () => {
                 justifyContent: 'end',
                 alignItems: 'center',
                 width: '100vw', 
-                height: '64px', 
-                backgroundColor: theme.palette.primary.dark,
-                padding: '2rem'
+                height: '10px', 
+                backgroundColor: theme.palette.secondary.main,
+                padding: '1rem'
             }}>
             </Box>
             <Box sx={{
@@ -49,7 +49,7 @@ const LandingPage: FC = () => {
                 gap: '3rem',
                 width: '80vw', 
                 height: '100%',
-                backgroundColor: theme.palette.grey[100],
+                backgroundColor: theme.palette.background.paper,
                 padding: '2rem'
             }}>
                 <TextField variant={"outlined"} label={'Search'} onChange={(e) => setSearchValue(e.target.value)}/>

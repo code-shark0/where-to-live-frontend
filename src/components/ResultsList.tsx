@@ -1,6 +1,6 @@
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable, getSortedRowModel, SortingState } from "@tanstack/react-table";
 import { FC, useEffect, useState } from "react";
-import { Box } from "@mui/material";
+import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TableSortLabel } from "@mui/material";
 import { InjectedCity, ScoredCity } from "../types/City";
 import { Preferences } from "../types/Preferences";
 import PreferencesSlider from "./PreferencesSlider";
@@ -113,54 +113,72 @@ const ResultsList: FC<ResultsListProps> = ({data}) => {
                     ))
                 }
             </Box>
-            <table style={{
-                textAlign: 'center',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '100%',
-            }}>
-                <thead>
-                    {table.getHeaderGroups().map(headerGroup => (
-                    <tr key={headerGroup.id}>
-                        {headerGroup.headers.map(header => (
-                        <th
-                            key={header.id}
-                            onClick={header.column.getToggleSortingHandler()}
-                            style={{ cursor: header.column.getCanSort() ? 'pointer' : 'default', userSelect: 'none' }}
+            <TableContainer component={Paper} sx={{ boxShadow: 3, borderRadius: 2 }}>
+                <Table sx={{ minWidth: 650 }} aria-label="results table">
+                    <TableHead sx={{ backgroundColor: 'primary.main' }}>
+                        {table.getHeaderGroups().map(headerGroup => (
+                        <TableRow key={headerGroup.id}>
+                            {headerGroup.headers.map(header => (
+                            <TableCell
+                                key={header.id}
+                                sortDirection={header.column.getIsSorted() === 'asc' ? 'asc' : header.column.getIsSorted() === 'desc' ? 'desc' : false}
+                                sx={{ 
+                                    cursor: header.column.getCanSort() ? 'pointer' : 'default', 
+                                    userSelect: 'none',
+                                    fontWeight: 'bold',
+                                    color: 'common.white'
+                                }}
+                            >
+                                {header.isPlaceholder
+                                    ? null
+                                    : (
+                                        <TableSortLabel
+                                            active={!!header.column.getIsSorted()}
+                                            direction={header.column.getIsSorted() === 'asc' ? 'asc' : 'desc'}
+                                            onClick={header.column.getToggleSortingHandler()}
+                                            sx={{ 
+                                                '& .MuiTableSortLabel-icon': {
+                                                    color: 'common.white !important', // Ensure icon is white
+                                                }
+                                            }}
+                                        >
+                                            {flexRender(header.column.columnDef.header, header.getContext())}
+                                        </TableSortLabel>
+                                    )}
+                            </TableCell>
+                            ))}
+                        </TableRow>
+                        ))}
+                    </TableHead>
+                    <TableBody>
+                        {table.getRowModel().rows.map((row, index) => (
+                        <TableRow 
+                            key={row.id}
+                            sx={{
+                                '&:nth-of-type(odd)': {
+                                    backgroundColor: (theme) => theme.palette.action.hover, // Alternating row color
+                                },
+                                '&:hover': {
+                                    backgroundColor: (theme) => theme.palette.action.selected, // Hover effect
+                                }
+                            }}
                         >
-                            {header.isPlaceholder
-                                ? null
-                                : (
-                                    <>
-                                        {flexRender(header.column.columnDef.header, header.getContext())}
-                                        {header.column.getCanSort() && (
-                                            <span style={{ marginLeft: 4 }}>
-                                                {header.column.getIsSorted() === 'asc' ? '▲' : header.column.getIsSorted() === 'desc' ? '▼' : ''}
-                                            </span>
-                                        )}
-                                    </>
-                                )}
-                        </th>
+                            {row.getVisibleCells().map(cell => (
+                            <TableCell 
+                                key={cell.id}
+                                sx={{
+                                    padding: '12px 16px', // Adjusted padding
+                                    borderBottom: (theme) => `1px solid ${theme.palette.divider}`
+                                }}
+                            >
+                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                            </TableCell>
+                            ))}
+                        </TableRow>
                         ))}
-                    </tr>
-                    ))}
-                </thead>
-                <tbody>
-                    {table.getRowModel().rows.map(row => (
-                    <tr key={row.id}>
-                        {row.getVisibleCells().map(cell => (
-                        <td style={{
-                            textAlign: 'center',
-                            padding: '.5rem',
-                            border: '1px solid #ccc'
-                        }} key={cell.id}>
-                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                        </td>
-                        ))}
-                    </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </TableBody>
+                </Table>
+            </TableContainer>
         </Box>
     )
 }
