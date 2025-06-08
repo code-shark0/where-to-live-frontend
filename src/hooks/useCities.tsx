@@ -10,7 +10,6 @@ export function useCities() {
 			.then(res => res.json())
 			.then((cities) => {
 				const injectedCities = injectCitiesWithMetaData(cities);
-				console.log(injectedCities);
 				setCities(injectedCities)
 			})
 			.catch(console.error);

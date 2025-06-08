@@ -17,7 +17,6 @@ interface ResultsListProps {
 // The data coming in is assumed to be an aggregated superset of all the users saved albums, tracks, and episodes
 const ResultsList: FC<ResultsListProps> = ({cityData, preferences, onSetPreferences}) => {
     const [listData, setListData] = useState<Array<ScoredCity>>([]);
-    console.log('listData', listData)
 
     useEffect(() => {
         setListData(cityData.map(item => {return {

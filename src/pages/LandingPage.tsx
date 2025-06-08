@@ -14,7 +14,7 @@ const defaultPreferences: Preferences = {
     incomeToCostRatio: 0,
     crimeIndex: 0,
     violentCrimeIndex: 0,
-    propertyCrimeIndex: 0,
+    propertyCrimeRate: 0,
     walkabilityScore: 0,
     bikeabilityScore: 0,
     transitScore: 0,

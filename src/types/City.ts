@@ -10,7 +10,7 @@ export interface City {
 	incomeToCostRatio: number;
 	crimeIndex: number;            // Higher = more crime
 	violentCrimeIndex: number;
-	propertyCrimeIndex: number;
+	propertyCrimeRate: number;
 	walkabilityScore: number;      // 0–100
 	bikeabilityScore: number;
 	transitScore: number;
@@ -42,7 +42,7 @@ export interface InjectedCity {
 	incomeToCostRatio: IndexData;
 	crimeIndex: IndexData;
 	violentCrimeIndex: IndexData;
-	propertyCrimeIndex: IndexData;
+	propertyCrimeRate: IndexData;
 	walkabilityScore: IndexData;
 	bikeabilityScore: IndexData;
 	transitScore: IndexData;

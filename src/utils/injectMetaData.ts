@@ -14,7 +14,7 @@ export const injectCitiesWithMetaData = (cities: Array<City>): Array<InjectedCit
     const incomeToCostRatios = cities.map(city => city.incomeToCostRatio);
     const crimeIndices = cities.map(city => city.crimeIndex);
     const violentCrimeIndices = cities.map(city => city.violentCrimeIndex);
-    const propertyCrimeIndices = cities.map(city => city.propertyCrimeIndex);
+    const propertyCrimeRates = cities.map(city => city.propertyCrimeRate);
     const walkabilityScores = cities.map(city => city.walkabilityScore);
     const bikeabilityScores = cities.map(city => city.bikeabilityScore);
     const transitScores = cities.map(city => city.transitScore);
@@ -89,11 +89,11 @@ export const injectCitiesWithMetaData = (cities: Array<City>): Array<InjectedCit
             min: Math.min(...violentCrimeIndices),
             max: Math.max(...violentCrimeIndices),
         },
-        propertyCrimeIndex: {
+        propertyCrimeRate: {
             type: ValueType.LowerIsBetter,
-            value: city.propertyCrimeIndex,
-            min: Math.min(...propertyCrimeIndices),
-            max: Math.max(...propertyCrimeIndices),
+            value: city.propertyCrimeRate,
+            min: Math.min(...propertyCrimeRates),
+            max: Math.max(...propertyCrimeRates),
         },
         walkabilityScore: {
             type: ValueType.HigherIsBetter,
