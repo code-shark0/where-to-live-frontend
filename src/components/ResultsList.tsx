@@ -17,24 +17,25 @@ interface ResultsListProps {
 // The data coming in is assumed to be an aggregated superset of all the users saved albums, tracks, and episodes
 const ResultsList: FC<ResultsListProps> = ({cityData, preferences, onSetPreferences}) => {
     const [listData, setListData] = useState<Array<ScoredCity>>([]);
-    
+    console.log('listData', listData)
 
     useEffect(() => {
         setListData(cityData.map(item => {return {
-            id: item?.id,
+            ...item,
             score: calculateScore(item, preferences),
-            name: item?.name,
-            costOfLivingIndex: item?.costOfLivingIndex,
-            crimeIndex: item?.crimeIndex,
-            medianIncome: item?.medianIncome,
-            walkabilityScore: item?.walkabilityScore,
-            averageTemperature: item?.averageTemperature}}));
+            rank: 1,
+        }}));
     }, [cityData, preferences]);
 
     const columnHelper = createColumnHelper<ScoredCity>();
     const columns = [
+        // columnHelper.accessor('rank', {
+        //     header: 'Rank',
+        //     cell: info => info.getValue(),
+        //     enableSorting: true,
+        // }),
         columnHelper.accessor('name', {
-            header: 'Name',
+            header: 'City',
             cell: info => info.renderValue(),
             enableSorting: true,
         }),
@@ -67,9 +68,9 @@ const ResultsList: FC<ResultsListProps> = ({cityData, preferences, onSetPreferen
             cell: info => info.getValue(),
             enableSorting: true
         }),
-        columnHelper.accessor(row => row.averageTemperature.value, {
-            id: 'averageTemperature',
-            header: 'Average Temperature',
+        columnHelper.accessor(row => row.averageAnnualTemperature.value, {
+            id: 'averageAnnualTemperature',
+            header: 'Average Annual Temperature',
             cell: info => info.getValue(),
             enableSorting: true
         })

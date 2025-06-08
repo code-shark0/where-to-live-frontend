@@ -1,20 +1,25 @@
 import { InjectedCity, IndexData } from "../types/City";
 import { Preferences } from "../types/Preferences";
+import { ValueType } from "../types/ValueType";
 
 export const calculateScore = (city: InjectedCity, preferences: Preferences) => {    
+    
+    city.name === 'Seattle' && console.log(city, preferences)
     let score = 0
     Object.keys(city).forEach(key => {
-        if(key === 'id' || key === 'name') return;
+        if(key === 'id' || key === 'name' || key === 'score') return;
         const preferenceValue = preferences[key as keyof Preferences]
         const cityValue = city[key as keyof InjectedCity] as IndexData;
 
-        if (cityValue.type === 'higherIsBetter') {
+        if (cityValue.type === ValueType.HigherIsBetter) {
             const change = (preferenceValue + 3) * (cityValue.value - cityValue.min) / (cityValue.max - cityValue.min) * 100 / 6;
             score += change;
-        } else if (cityValue.type === 'lowerIsBetter') {
+        } else if (cityValue.type === ValueType.LowerIsBetter) {
             const change = (preferenceValue + 3) *(cityValue.max - cityValue.value) / (cityValue.max - cityValue.min) * 100 / 6;
             score += change;
-        } else if (cityValue.type === 'specialCase') {
+        } else if (cityValue.type === ValueType.closestNumber) {
+            const change = (preferenceValue + 3) * Math.abs(cityValue.value - cityValue.min) / (cityValue.max - cityValue.min) * 100 / 6;
+            score += change;
         }
     })
     return score;

@@ -6,17 +6,41 @@ import { useCities } from "../hooks/useCities";
 import Header from "../components/Header";
 import { Preferences } from "../types/Preferences";
 
+const defaultPreferences: Preferences = {
+    costOfLivingIndex: 0,
+    medianRent: 0,
+    medianHomePrice: 0,
+    medianIncome: 0,
+    incomeToCostRatio: 0,
+    crimeIndex: 0,
+    violentCrimeIndex: 0,
+    propertyCrimeIndex: 0,
+    walkabilityScore: 0,
+    bikeabilityScore: 0,
+    transitScore: 0,
+    commuteTime: 0,
+    trafficCongestionIndex: 0,
+    averageAnnualTemperature: 0,
+    airQualityIndex: 0,
+    greenSpacePerCapita: 0,
+    naturalDisasterRisk: 0,
+    healthcareAccessScore: 0,
+    educationIndex: 0,
+    universityProximity: 0,
+    diversityIndex: 0,
+    politicalLeaning: 0,
+    nightlifeIndex: 0,
+    religiousInstitutionsPerCapita: 0,
+    jobMarketIndex: 0,
+    unemploymentRate: 0,
+    startupEcosystemRank: 0,
+}
+
 const LandingPage: FC = () => {
     const [filteredData, setFilteredData] = useState<Array<any>>([]);
     const [searchValue, setSearchValue] = useState('');
     const cityData = useCities();
-    const [preferences, setPreferences] = useState<Preferences>({
-        costOfLivingIndex: 0,
-        crimeIndex: 0,
-        medianIncome: 0,
-        walkabilityScore: 0,
-        averageTemperature: 0
-    });
+    const [preferences, setPreferences] = useState<Preferences>(defaultPreferences);
 
     useEffect(() => {
         const filteredData = cityData.filter(item => {
@@ -32,14 +56,9 @@ const LandingPage: FC = () => {
     }
 
     const handleResetPreferences = () => {
-        setPreferences({
-            costOfLivingIndex: 0,
-            crimeIndex: 0,
-            medianIncome: 0,
-            walkabilityScore: 0,
-            averageTemperature: 0
-        });
+        setPreferences(defaultPreferences);
     }
+
     return (
         <Box
             sx={{ 
